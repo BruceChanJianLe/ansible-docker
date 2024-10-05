@@ -1,0 +1,21 @@
+- hosts: localhost
+  vars:
+    nvidia_docker_gpg_key_url: "https://nvidia.github.io/libnvidia-container/gpgkey"
+    nvidia_toolkit_repository_url: "https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list"
+
+  pre_tasks:
+  - name: Update Apt
+    become: true
+    apt:
+      upgrade: no
+      force_apt_get: true
+      update_cache: true
+      cache_valid_time: 86400 #One day
+      state: present
+    tags:
+      - setup
+
+  tasks:
+    - include_tasks: tasks/docker.yml
+    - include_tasks: tasks/docker-nvidia.yml
+
