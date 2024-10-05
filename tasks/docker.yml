@@ -1,4 +1,5 @@
 - name: Install required system packages
+  become: yes
   apt:
     pkg:
       - apt-transport-https
@@ -12,21 +13,25 @@
     update_cache: true
 
 - name: Add Docker GPG apt Key
+  become: yes
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
 - name: Add Docker Repository
+  become: yes
   apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu bionic stable
     state: present
 
 - name: Update apt and install docker-ce
+  become: yes
   apt:
     name: docker-ce
     state: latest
     update_cache: true
 
 - name: Install Docker Module for Python
+  become: yes
   pip:
     name: docker
