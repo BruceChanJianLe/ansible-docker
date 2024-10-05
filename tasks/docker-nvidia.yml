@@ -54,4 +54,4 @@
 - name: Install nvidia container toolkit
   become: yes
   apt:
-    name: nvidia-container-toolkit
+    name: nvidia-docker2
