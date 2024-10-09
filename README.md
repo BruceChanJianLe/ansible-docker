@@ -11,6 +11,11 @@ For the impatience, you may also activate the changes by running:
 newgrp docker
 ```
 
+## Install Dependencies
+```bash
+sudo apt install ansible git -y
+```
+
 ## Usage
 Installing ROS2
 ```bash
