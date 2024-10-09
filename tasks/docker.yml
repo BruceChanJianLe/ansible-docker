@@ -30,3 +30,17 @@
     name: docker-ce
     state: latest
     update_cache: true
+
+# Post Installation
+- name: Create docker group if it doesn't exist
+  become: yes
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Add current user to the docker group
+  become: yes
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: yes
