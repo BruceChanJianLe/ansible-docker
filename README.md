@@ -6,7 +6,7 @@ Note that after installing docker, you are required to reboot or re-login to
 activate the re-evaluation of groups in order to run it without
 root privilleges.
 
-For the impatience, you may also activate the changes by running:
+For the impatient, you may also activate the changes by running:
 ```bash
 newgrp docker
 ```
