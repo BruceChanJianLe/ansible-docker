@@ -16,15 +16,10 @@ newgrp docker
 sudo apt install ansible git -y
 ```
 
-## Usage
-Installing ROS2
+## Installation
+
 ```bash
 ansible-pull -U https://github.com/brucechanjianle/ansible-docker -K
-```
-
-For Docker
-```bash
-ansible-pull -U https://github.com/brucechanjianle/ansible-docker
 ```
 
 ## Verification
