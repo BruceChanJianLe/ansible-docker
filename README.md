@@ -3,7 +3,7 @@
 This is an Ansible playbook that assist the installation of docker and NVIDIA docker.
 
 
-## Install Dependencies
+## Package Dependencies
 ```bash
 sudo apt install ansible git -y
 ```
