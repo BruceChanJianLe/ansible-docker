@@ -12,10 +12,20 @@
       update_cache: true
       cache_valid_time: 86400 #One day
       state: present
-    tags:
-      - setup
+    when: ansible_os_family == "Debian"
+
+  - name: Update Package Manager
+    become: true
+    pacman:
+      update_cache: true
+      state: present
+    when: ansible_os_family == "Archlinux"
 
   tasks:
-    - include_tasks: tasks/docker.yml
-    - include_tasks: tasks/docker-nvidia.yml
+    - include_tasks: tasks/setup-Debian.yml
+      when: ansible_os_family == 'Debian'
+      tags: [docker, nvidia-docker]
+    - include_tasks: tasks/setup-Archlinux.yml
+      when: ansible_os_family == "Archlinux"
+      tags: [docker, nvidia-docker]
 
