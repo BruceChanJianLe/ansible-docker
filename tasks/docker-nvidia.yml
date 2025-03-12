@@ -55,3 +55,10 @@
   become: yes
   apt:
     name: nvidia-docker2
+
+- name: Restart docker service
+  become: yes
+  ansible.builtin.systemd_service:
+    name: docker.service
+    enabled: yes
+    state: restarted
