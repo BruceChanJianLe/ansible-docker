@@ -1,0 +1,21 @@
+- name: Install docker and docker-buildx
+  become: yes
+  ansible.builtin.pacman:
+    name:
+      - docker
+      - docker-buildx
+  tags: docker
+
+# Post Installation
+- name: Create docker group if it doesn't exist
+  become: yes
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Add current user to the docker group
+  become: yes
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: yes
