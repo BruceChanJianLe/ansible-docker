@@ -2,4 +2,4 @@
 - include_tasks: tasks/Debian/docker.yml
   tags: docker
 - include_tasks: tasks/Debian/docker-nvidia.yml
-  tags: docker
+  tags: nvidia-docker

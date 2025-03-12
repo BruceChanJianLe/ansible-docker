@@ -3,8 +3,7 @@
   ansible.builtin.pacman:
     name:
       - nvidia-container-toolkit
-  tags: docker
-
+  tags: nvidia-docker
 
 - name: Restart docker service
   become: yes
@@ -12,3 +11,4 @@
     name: docker.service
     enabled: yes
     state: restarted
+  tags: nvidia-docker

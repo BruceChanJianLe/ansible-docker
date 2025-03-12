@@ -6,12 +6,14 @@
   vars:
     packages:
     - curl
+  tags: nvidia-docker
 
 - name: Download NVIDIA GPG key
   ansible.builtin.get_url:
     url: "{{ nvidia_docker_gpg_key_url }}"
     dest: /tmp/nvidia-gpgkey
     mode: '0644'
+  tags: nvidia-docker
 
 - name: Convert GPG key to binary format and store in keyring
   become: yes
@@ -19,17 +21,20 @@
     cmd: gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg /tmp/nvidia-gpgkey
   args:
     creates: /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+  tags: nvidia-docker
 
 - name: Remove temporary GPG key file
   ansible.builtin.file:
     path: /tmp/nvidia-gpgkey
     state: absent
+  tags: nvidia-docker
 
 - name: Download NVIDIA container toolkit repository list
   ansible.builtin.get_url:
     url: "{{ nvidia_toolkit_repository_url }}"
     dest: /tmp/nvidia-container-toolkit.list
     mode: '0644'
+  tags: nvidia-docker
 
 - name: Modify the repository list to include signed-by option
   become: yes
@@ -37,11 +42,13 @@
     cmd: sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' /tmp/nvidia-container-toolkit.list > /etc/apt/sources.list.d/nvidia-container-toolkit.list
   args:
     creates: /etc/apt/sources.list.d/nvidia-container-toolkit.list
+  tags: nvidia-docker
 
 - name: Remove temporary repository list file
   ansible.builtin.file:
     path: /tmp/nvidia-container-toolkit.list
     state: absent
+  tags: nvidia-docker
 
 - name: Update Apt
   become: true
@@ -50,11 +57,13 @@
     force_apt_get: true
     update_cache: true
     state: present
+  tags: nvidia-docker
 
 - name: Install nvidia container toolkit
   become: yes
   apt:
     name: nvidia-docker2
+  tags: nvidia-docker
 
 - name: Restart docker service
   become: yes
@@ -62,3 +71,4 @@
     name: docker.service
     enabled: yes
     state: restarted
+  tags: nvidia-docker
