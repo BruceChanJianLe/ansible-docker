@@ -18,7 +18,7 @@ ansible-pull -U https://github.com/brucechanjianle/ansible-docker -K
 
 ```bash
 docker run --rm hello-world
-docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu20.04 nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.8.1-base-ubuntu24.04 nvidia-smi
 ```
 
 ## Post Installation
