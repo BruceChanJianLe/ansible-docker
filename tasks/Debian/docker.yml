@@ -13,18 +13,61 @@
     update_cache: true
   tags: docker
 
-- name: Add Docker GPG apt Key
+- name: Remove legacy Docker repository entry
   become: yes
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/download_docker_com_linux_ubuntu.list
+    state: absent
+  tags: docker
+
+- name: Remove legacy Docker key exported to trusted.gpg.d
+  become: yes
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/docker.gpg
+    state: absent
+  tags: docker
+
+- name: Check whether apt-key is available
+  ansible.builtin.stat:
+    path: /usr/bin/apt-key
+  register: apt_key_binary
+  tags: docker
+
+- name: Remove legacy Docker key from trusted.gpg
+  become: yes
+  ansible.builtin.apt_key:
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: absent
+  when: apt_key_binary.stat.exists
+  tags: docker
+
+- name: Create apt keyrings directory
+  become: yes
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  tags: docker
+
+- name: Download Docker GPG key
+  become: yes
+  ansible.builtin.get_url:
+    url: "https://download.docker.com/linux/{{ docker_apt_distro }}/gpg"
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
   tags: docker
 
 - name: Add Docker Repository
   become: yes
-  apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
-    state: present
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/docker.sources
+    mode: '0644'
+    content: |
+      Types: deb
+      URIs: https://download.docker.com/linux/{{ docker_apt_distro }}
+      Suites: {{ ansible_distribution_release }}
+      Components: stable
+      Signed-By: /etc/apt/keyrings/docker.asc
   tags: docker
 
 - name: Update apt and install docker-ce
