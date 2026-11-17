@@ -4,6 +4,19 @@
     nvidia_toolkit_repository_url: "https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list"
 
   pre_tasks:
+  - name: Check for classic sudo (sudo.ws)
+    become: false
+    ansible.builtin.stat:
+      path: /usr/bin/sudo.ws
+    register: sudo_ws
+    tags: always
+
+  - name: Prefer classic sudo where sudo-rs is the default
+    become: false
+    ansible.builtin.set_fact:
+      ansible_become_exe: "{{ '/usr/bin/sudo.ws' if sudo_ws.stat.exists else '/usr/bin/sudo' }}"
+    tags: always
+
   - name: Update Apt
     become: true
     apt:
@@ -12,7 +25,7 @@
       update_cache: true
       cache_valid_time: 86400 #One day
       state: present
-    when: ansible_os_family == "Debian"
+    when: ansible_facts['os_family'] == "Debian"
 
   - name: Update Package Manager
     become: true
