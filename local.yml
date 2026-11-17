@@ -29,7 +29,7 @@
 
   - name: Update Package Manager
     become: true
-    pacman:
+    community.general.pacman:
       update_cache: true
       state: present
     when: ansible_os_family == "Archlinux"

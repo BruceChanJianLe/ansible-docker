@@ -13,6 +13,11 @@
     update_cache: true
   tags: docker
 
+- name: Select Docker repository distribution
+  ansible.builtin.set_fact:
+    docker_apt_distro: "{{ 'debian' if ansible_distribution == 'Debian' else 'ubuntu' }}"
+  tags: docker
+
 - name: Remove legacy Docker repository entry
   become: yes
   ansible.builtin.file:
